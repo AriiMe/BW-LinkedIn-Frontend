@@ -27,8 +27,8 @@ class RSidebar extends React.Component {
             <div>
               <div style={{ marginTop: "-130px" }}>
                 <img
-                  src={this.props.me.image}
-                  alt="placeholder"
+                  src={this.props.me.imgurl}
+                  alt="propic"
                   height="120px"
                   width="120px"
                   style={{
@@ -92,7 +92,7 @@ class RSidebar extends React.Component {
               </svg>
               My Items
             </ListGroupItem>
-            <ListGroupItem onClick={() => this.logout()}>
+            <ListGroupItem action onClick={() => this.logout()}>
               <button className="logoutbtn">Logout</button>
             </ListGroupItem>
           </ListGroup>
