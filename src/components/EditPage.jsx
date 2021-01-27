@@ -132,7 +132,11 @@ class EditPage extends React.Component {
             </IconContext.Provider>
           </Modal.Header>
           <Modal.Body>
-            <img src={this.state.profile.imgurl} className="editImage" />
+            <img
+              src={this.state.profile.imgurl}
+              alt="profilepic"
+              className="editImage"
+            />
             {/* <input type="file" onChange={this.fileSelectHandler}></input>
             <button onClick={this.fileUploadHandler}>Upload Image</button> */}
             <Form>

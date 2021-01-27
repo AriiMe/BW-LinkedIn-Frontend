@@ -8,7 +8,7 @@ export default class SignUp extends Component {
     profile: [],
     hidden: true,
   };
-  url = "https://striveschool-api.herokuapp.com/api/account/register";
+  url = "https://striveschool-api.herokuapp.com/api/profile";
   header = {
     ContentType: "application/json",
   };

@@ -144,6 +144,7 @@ class Experience extends React.Component {
                                     experience.image ? experience.image : Job
                                   }
                                   style={{ width: "48px" }}
+                                  alt="expimg"
                                 />
                               </div>
                               <Col>

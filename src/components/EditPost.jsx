@@ -130,6 +130,7 @@ class EditPost extends React.Component {
                 <img
                   src={this.props.post.profile.imgurl}
                   className="postModalImg"
+                  alt="profpic"
                 />
                 <strong className="ml-5">
                   {this.props.post.profile.name +

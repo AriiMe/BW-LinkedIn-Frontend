@@ -8,7 +8,7 @@ class Login extends Component {
     profile: [],
     hidden: true,
   };
-  url = "https://striveschool-api.herokuapp.com/api/account/register";
+  url = "https://linkedin-bw-clone.herokuapp.com/api/profile/login";
   submitData = async (e) => {
     e.preventDefault();
     try {
@@ -44,6 +44,9 @@ class Login extends Component {
         },
       });
     }
+  };
+  handleFPW = (e) => {
+    console.log("hi");
   };
   toggleShow = (e) => {
     e.preventDefault();
@@ -116,7 +119,9 @@ class Login extends Component {
                   </Button>
                 </Col>
               </Form>
-              <a className="forgetPwd">Forget your password?</a>
+              <a href={this.handleFPW()} className="forgetPwd">
+                Forget your password?
+              </a>
             </div>
             {this.props.dontShowLogo ? (
               ""
