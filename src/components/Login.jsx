@@ -5,7 +5,7 @@ import FooterLogo from "../footer_logo.svg";
 import "../styles/Login.css";
 class Login extends Component {
   state = {
-    profile: [],
+    user: [],
     hidden: true,
   };
   url = "https://linkedin-bw-clone.herokuapp.com/api/profile/login";
@@ -14,7 +14,7 @@ class Login extends Component {
     try {
       let response = await fetch(this.url, {
         method: "POST",
-        body: JSON.stringify(this.state.profile),
+        body: JSON.stringify(this.state.user),
         headers: {
           "Content-Type": "application/json",
         },
@@ -30,23 +30,17 @@ class Login extends Component {
   };
   onChangeHandler = (e) => {
     this.setState({
-      profile: { ...this.state.profile, [e.target.id]: e.currentTarget.value },
+      user: { ...this.state.user, [e.target.id]: e.currentTarget.value },
     });
   };
   handleLogin = (e) => {
     if (e.keyCode === 13) {
-      this.props.submitData(this.state.profile);
+      this.props.submitData(this.state.user);
     } else {
       this.setState({
-        profile: {
-          ...this.state.profile,
-          [e.target.id]: e.currentTarget.value,
-        },
+        user: { ...this.state.user, [e.target.id]: e.currentTarget.value },
       });
     }
-  };
-  handleFPW = (e) => {
-    console.log("hi");
   };
   toggleShow = (e) => {
     e.preventDefault();
@@ -84,8 +78,8 @@ class Login extends Component {
                 <Form.Group>
                   <Form.Control
                     required
-                    id="profilename"
-                    value={this.state.profile.profilename}
+                    id="username"
+                    value={this.state.user.username}
                     type="text"
                     size="lg"
                     placeholder="Email or Phone"
@@ -97,7 +91,7 @@ class Login extends Component {
                   <Form.Control
                     required
                     id="password"
-                    value={this.state.profile.password}
+                    value={this.state.user.password}
                     type={this.state.hidden ? "password" : "text"}
                     size="lg"
                     placeholder="Password"
@@ -119,9 +113,7 @@ class Login extends Component {
                   </Button>
                 </Col>
               </Form>
-              <a href={this.handleFPW()} className="forgetPwd">
-                Forget your password?
-              </a>
+              <a className="forgetPwd">Forget your password?</a>
             </div>
             {this.props.dontShowLogo ? (
               ""

@@ -8,7 +8,7 @@ export default class SignUp extends Component {
     profile: [],
     hidden: true,
   };
-  url = "https://striveschool-api.herokuapp.com/api/profile";
+  url = "https://linkedin-bw-clone.herokuapp.com/api/profile";
   header = {
     ContentType: "application/json",
   };
