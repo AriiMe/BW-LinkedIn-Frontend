@@ -86,7 +86,7 @@ class PostModal extends React.Component {
           <Modal.Body>
             <Row>
               <Col>
-                <img src={this.props.me.image} className="postModalImg" />
+                <img src={this.props.me.imgurl} className="postModalImg" />
                 <strong className="ml-5">
                   {this.props.me.name + " " + this.props.me.surename}
                 </strong>
