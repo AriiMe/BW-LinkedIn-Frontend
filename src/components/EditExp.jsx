@@ -13,6 +13,7 @@ class Edit extends React.Component {
   url = "https://linkedin-bw-clone.herokuapp.com/api/profile/";
   headers = {
     "Content-Type": "application/json",
+    Authorization: "Bearer " + localStorage.getItem("token"),
   };
   fetchExp = async () => {
     try {
@@ -97,11 +98,15 @@ class Edit extends React.Component {
   };
 
   fileUploadHandler = async () => {
+    const fd = new FormData();
+    fd.append("experience", this.state.selectedFile);
     try {
       const response = await fetch(
         `https://linkedin-bw-clone.herokuapp.com/api/profile/${this.props.profileId}/exp/${this.props.expId}/imgurl`,
         {
           method: "POST",
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          body: fd,
         }
       );
       if (response.ok) {

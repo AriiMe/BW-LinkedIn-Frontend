@@ -5,7 +5,7 @@ import FooterLogo from "../footer_logo.svg";
 import "../styles/SignUp.css";
 export default class SignUp extends Component {
   state = {
-    profile: [],
+    user: [],
     hidden: true,
   };
   url = "https://linkedin-bw-clone.herokuapp.com/api/profile";
@@ -14,9 +14,9 @@ export default class SignUp extends Component {
   };
   submitData = async () => {
     try {
-      let payload = this.state.profile;
+      let payload = this.state.user;
       // payload.password = btoa(payload.password);
-      // payload.profilename = btoa(payload.profilename);
+      // payload.username = btoa(payload.username);
       let response = await fetch(this.url, {
         method: "POST",
         body: JSON.stringify(payload),
@@ -33,16 +33,16 @@ export default class SignUp extends Component {
   };
   onChangeHandler = (e) => {
     this.setState({
-      profile: { ...this.state.profile, [e.target.id]: e.currentTarget.value },
+      user: { ...this.state.user, [e.target.id]: e.currentTarget.value },
     });
   };
   handleLogin = (e) => {
     if (e.keyCode === 13) {
-      this.submitData(this.state.profile);
+      this.submitData(this.state.user);
     } else {
       this.setState({
-        profile: {
-          ...this.state.profile,
+        user: {
+          ...this.state.user,
           [e.target.id]: e.currentTarget.value,
         },
       });
@@ -69,11 +69,11 @@ export default class SignUp extends Component {
             <div className="bg-white d-flex flex-column ">
               <Form>
                 <Form.Group>
-                  <Form.Label>profilename</Form.Label>
+                  <Form.Label>username</Form.Label>
                   <Form.Control
                     required
-                    id="profilename"
-                    value={this.state.profile.profilename}
+                    id="username"
+                    value={this.state.user.username}
                     type="text"
                     size="sm"
                     placeholder="Email or Phone"
@@ -86,7 +86,7 @@ export default class SignUp extends Component {
                   <Form.Control
                     required
                     id="password"
-                    value={this.state.profile.password}
+                    value={this.state.user.password}
                     type={this.state.hidden ? "password" : "text"}
                     size="sm"
                     placeholder="Password"
@@ -97,7 +97,7 @@ export default class SignUp extends Component {
               </Form>
               <span>
                 By clicking Agree & Join, you agree to the LinkedIn{" "}
-                <a>profile Agreement</a>, <a>Privacy Policy</a>, and{" "}
+                <a>user Agreement</a>, <a>Privacy Policy</a>, and{" "}
                 <a>Cookie Policy</a>.
               </span>
               <Col className="signupCol px-0">

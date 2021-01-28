@@ -36,11 +36,15 @@ class PostModal extends React.Component {
     });
   };
   fileUploadHandler = async (postId) => {
+    const fd = new FormData();
+    fd.append("post", this.state.selectedFile);
     try {
       const response = await fetch(
         `https://linkedin-bw-clone.herokuapp.com/api/posts`,
         {
           method: "POST",
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          body: fd,
         }
       );
       if (response.ok) {
@@ -62,6 +66,7 @@ class PostModal extends React.Component {
           body: JSON.stringify(this.state.post),
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("token"),
           },
         }
       );

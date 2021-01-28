@@ -5,7 +5,7 @@ import FooterLogo from "../footer_logo.svg";
 import "../styles/Login.css";
 class Login extends Component {
   state = {
-    user: [],
+    username: [],
     hidden: true,
   };
   url = "https://linkedin-bw-clone.herokuapp.com/api/profile/login";
@@ -14,13 +14,14 @@ class Login extends Component {
     try {
       let response = await fetch(this.url, {
         method: "POST",
-        body: JSON.stringify(this.state.user),
+        body: JSON.stringify(this.state.username),
         headers: {
           "Content-Type": "application/json",
         },
       });
       if (response.ok) {
-        const { access_token } = await response.json();
+        const access_token = await response.json();
+        console.log(access_token);
         localStorage.setItem("token", access_token);
         this.props.history.push("/home");
       }
@@ -30,15 +31,21 @@ class Login extends Component {
   };
   onChangeHandler = (e) => {
     this.setState({
-      user: { ...this.state.user, [e.target.id]: e.currentTarget.value },
+      username: {
+        ...this.state.username,
+        [e.target.id]: e.currentTarget.value,
+      },
     });
   };
   handleLogin = (e) => {
     if (e.keyCode === 13) {
-      this.props.submitData(this.state.user);
+      this.props.submitData(this.state.username);
     } else {
       this.setState({
-        user: { ...this.state.user, [e.target.id]: e.currentTarget.value },
+        username: {
+          ...this.state.username,
+          [e.target.id]: e.currentTarget.value,
+        },
       });
     }
   };
@@ -79,7 +86,7 @@ class Login extends Component {
                   <Form.Control
                     required
                     id="username"
-                    value={this.state.user.username}
+                    value={this.state.username.username}
                     type="text"
                     size="lg"
                     placeholder="Email or Phone"
@@ -91,7 +98,7 @@ class Login extends Component {
                   <Form.Control
                     required
                     id="password"
-                    value={this.state.user.password}
+                    value={this.state.username.password}
                     type={this.state.hidden ? "password" : "text"}
                     size="lg"
                     placeholder="Password"

@@ -14,6 +14,7 @@ class Sidebar extends Component {
     fetch("https://linkedin-bw-clone.herokuapp.com/api/profile", {
       method: "GET",
       headers: new Headers({
+        Authorization: "Bearer " + localStorage.getItem("token"),
         ContentType: "application/json",
       }),
     })
