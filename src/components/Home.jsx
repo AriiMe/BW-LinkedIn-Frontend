@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { Component } from "react";
 import { Container, Button, Row, Col, Card, Alert } from "react-bootstrap";
 import { BiLike, BiCommentDetail, BiShare, BiSend } from "react-icons/bi";
@@ -6,6 +8,7 @@ import PostModal from "./PostModal";
 import RSidebar from "./RSidebar";
 import Sidebar from "./Sidebar";
 import "../styles/Home.css";
+import SinglePost from "./SinglePost";
 export default class Home extends Component {
   state = {
     posts: [],
@@ -43,6 +46,13 @@ export default class Home extends Component {
       });
     }
   };
+  fecthLikes = async () => {
+    try {
+      const result = await fetch(
+        "https://linkedin-bw-clone.herokuapp.com/api/"
+      );
+    } catch (e) {}
+  };
   fetchMe = async () => {
     try {
       const meFetch = await fetch(
@@ -65,6 +75,9 @@ export default class Home extends Component {
     this.fetchMe();
   }
   render() {
+    this.state.posts.length > 0
+      ? console.log("render", this.state.posts[0].profile.imgurl)
+      : console.log(" ");
     return (
       <div className="homeDiv">
         <Container className="HomeCont">
@@ -87,45 +100,14 @@ export default class Home extends Component {
                     refetch={() => this.fetchPost()}
                     me={this.state.me}
                   />
-                  {this.state.posts.map((post) => (
-                    <Card className="w-100 my-4" key={`feed${post.id}`}>
-                      <Card.Header className="d-flex justify-content-between px-3">
-                        <div>
-                          <img
-                            src={post.profile.imgurl}
-                            className="postModalImg mr-3"
-                          />
-                          {post.profile.name + " " + post.profile.surename}
-                        </div>
-                        <EditPost
-                          post={post}
-                          refetch={() => this.fetchPost()}
-                        />
-                      </Card.Header>
-                      {post.imgurl && (
-                        <Card.Img
-                          src={post.imgurl}
-                          alt="Postimgurl"
-                          className="postimgurl"
-                        />
-                      )}
-                      <Card.Text className="p-3">{post.text}</Card.Text>
-                      <Card.Footer className="HomeModal bg-white">
-                        <Button variant="outline-dark mx-1">
-                          <BiLike /> Like
-                        </Button>
-                        <Button variant="outline-dark mx-1">
-                          <BiCommentDetail /> Comment
-                        </Button>
-                        <Button variant="outline-dark mx-1">
-                          <BiShare /> Share
-                        </Button>
-                        <Button variant="outline-dark mx-1">
-                          <BiSend /> Send
-                        </Button>
-                      </Card.Footer>
-                    </Card>
-                  ))}
+                  {this.state.posts.length > 0 &&
+                    this.state.posts.map((post) => (
+                      <SinglePost
+                        post={post}
+                        fetchPost={() => this.fetchPost()}
+                        me={this.state.me}
+                      />
+                    ))}
                 </Col>
                 <Col className="d-none d-md-block" md={3}>
                   <Sidebar />

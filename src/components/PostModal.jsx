@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Button, Col, Row, Modal, Form, Card } from "react-bootstrap";
 import { FaCamera, FaVideo, FaStickyNote, FaPenSquare } from "react-icons/fa";
@@ -9,7 +11,6 @@ import "../styles/PostModal.css";
 class PostModal extends React.Component {
   state = {
     showModal: false,
-    me: {},
     selectedFile: null,
     imgSubmitStatus: "secondary",
     post: {
@@ -31,16 +32,19 @@ class PostModal extends React.Component {
   };
   fileSelectHandler = (event) => {
     this.setState({
-      selectedFile: event.target.files[0],
+      selectedFile: event.currentTarget.files[0],
       imgSubmitStatus: "success",
     });
   };
-  fileUploadHandler = async (postId) => {
+  fileUploadHandler = async () => {
     const fd = new FormData();
-    fd.append("post", this.state.selectedFile);
+    fd.append("PostImage", this.state.selectedFile);
+    fd.append("text", this.state.post.text);
+
+    console.log(fd);
     try {
       const response = await fetch(
-        `https://linkedin-bw-clone.herokuapp.com/api/posts`,
+        `https://linkedin-bw-clone.herokuapp.com/api/posts/${this.props.me.id}/upload`,
         {
           method: "POST",
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
@@ -57,32 +61,9 @@ class PostModal extends React.Component {
       console.log(error);
     }
   };
-  post = async () => {
-    try {
-      const response = await fetch(
-        "https://linkedin-bw-clone.herokuapp.com/api/posts",
-        {
-          method: "POST",
-          body: JSON.stringify(this.state.post),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
-      if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        this.fileUploadHandler(data.id);
-        // this.setState({ showModal: false }, () => this.props.refetch());
-      } else {
-        this.setState({ showModal: false });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+
   render() {
+    console.log("profileId", this.props.me.id);
     return (
       <>
         <Card className="bg-white p-4">
@@ -171,7 +152,11 @@ class PostModal extends React.Component {
               <FaStickyNote />
               <FaPenSquare />
             </IconContext.Provider>
-            <Button rounded-pill variant="primary" onClick={() => this.post()}>
+            <Button
+              rounded-pill
+              variant="primary"
+              onClick={() => this.fileUploadHandler()}
+            >
               Post
             </Button>
           </Modal.Footer>

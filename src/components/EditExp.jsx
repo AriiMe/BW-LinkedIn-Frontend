@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 // import { useState } from "react";
 import { Button, Modal, Form, Row, Col } from "react-bootstrap";
@@ -5,35 +7,11 @@ import "../App.css";
 import "../styles/Profile.css";
 class Edit extends React.Component {
   state = {
-    showModal: false,
-    experience: {},
+    experience: this.props.exp,
     selectedFile: null,
     imgSubmitStatus: "secondary",
   };
-  url = "https://linkedin-bw-clone.herokuapp.com/api/profile/";
-  headers = {
-    "Content-Type": "application/json",
-    Authorization: "Bearer " + localStorage.getItem("token"),
-  };
-  fetchExp = async () => {
-    try {
-      if (this.props.expId !== null) {
-        const response = await fetch(
-          `${this.url}${this.props.profileId}/exp/${this.props.expId}`,
-          {
-            method: "GET",
-            headers: this.headers,
-          }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          this.setState({ experience: data });
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+
   onChangeHandler = (e) => {
     this.setState({
       experience: {
@@ -42,54 +20,13 @@ class Edit extends React.Component {
       },
     });
   };
-  submitData = async (str) => {
-    const url =
-      str === "POST"
-        ? `${this.url}${this.props.profileId}/exp`
-        : `${this.url}${this.props.profileId}/exp/${this.props.expId}`;
-    const payload = JSON.stringify(this.state.experience);
-    try {
-      console.log(payload, str);
-      const response = await fetch(url, {
-        method: str,
-        headers: this.headers,
-        body: payload,
-      });
-      if (response.ok) {
-        if (this.state.selectedFile !== null) {
-          this.fileUploadHandler();
-        } else {
-          this.props.toggle();
-          this.props.refetch();
-        }
-      } else {
-        console.log("submit failed");
-      }
-      // this.fetchExp();
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  actionBtn = (str) => {
-    str !== "DELETE"
-      ? this.submitData(this.edit() ? "PUT" : "POST")
-      : this.submitData("DELETE");
-  };
-  componentDidMount = () => {
-    this.fetchExp();
-  };
+
   componentDidUpdate(prevProps) {
-    if (prevProps.expId !== this.props.expId) {
-      if (this.edit()) {
-        this.fetchExp();
-      } else {
-        this.setState({ experience: { empty: true } });
-      }
+    if (prevProps.exp !== this.props.exp) {
+      this.setState({ experience: this.props.exp });
     }
   }
-  edit = () => {
-    return this.props.expId !== null ? true : false;
-  };
+
   fileSelectHandler = (event) => {
     this.setState({
       selectedFile: event.target.files[0],
@@ -98,22 +35,35 @@ class Edit extends React.Component {
   };
 
   fileUploadHandler = async () => {
+    alert("ok");
     const fd = new FormData();
-    fd.append("experience", this.state.selectedFile);
+    fd.append("role", this.state.experience.role);
+    fd.append("company", this.state.experience.company);
+    fd.append("startdate", this.state.experience.startdate);
+    fd.append("enddate", this.state.experience.enddate);
+    fd.append("description", this.state.experience.description);
+    fd.append("area", this.state.experience.area);
+    fd.append("profileId", this.props.profileId);
+    fd.append("ExpImage", this.state.selectedFile);
+    let url =
+      Object.keys(this.props.exp).length > 0
+        ? `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.exp.id}`
+        : `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.profileId}`;
+    console.log(url, Object.keys(this.props.exp).length > 0);
     try {
-      const response = await fetch(
-        `https://linkedin-bw-clone.herokuapp.com/api/profile/${this.props.profileId}/exp/${this.props.expId}/imgurl`,
-        {
-          method: "POST",
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
-          body: fd,
-        }
-      );
+      const response = await fetch(url, {
+        method: Object.keys(this.props.exp).length > 0 ? "PUT" : "POST",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+        },
+        body: fd,
+      });
+      console.log(response);
       if (response.ok) {
-        this.props.toggle();
+        this.props.toggle({}, false);
         this.props.refetch();
       } else {
-        this.props.toggle();
+        this.props.toggle({}, false);
         this.props.refetch();
       }
     } catch (error) {
@@ -121,16 +71,19 @@ class Edit extends React.Component {
     }
   };
   render() {
+    console.log("edit exp", this.props);
     return (
       <Modal
         show={this.props.show}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        onHide={this.props.toggle}
+        onHide={() => this.props.toggle({}, false)}
       >
         <Modal.Header closeButton>
-          <Modal.Title>{this.edit() ? "Edit" : "Add"} Experience</Modal.Title>
+          <Modal.Title>
+            {Object.keys(this.props.exp).length > 0 ? "Edit" : "Add"} Experience
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -164,8 +117,8 @@ class Edit extends React.Component {
                   <Form.Label>Start date * </Form.Label>
                   <Form.Control
                     required
-                    id="startDate"
-                    value={this.state.experience.startDate}
+                    id="startdate"
+                    value={this.state.experience.startdate}
                     type="date"
                     size="sm"
                     placeholder="Headline"
@@ -177,8 +130,8 @@ class Edit extends React.Component {
                 <Form.Group>
                   <Form.Label>End date (empty if current) </Form.Label>
                   <Form.Control
-                    value={this.state.experience.endDate}
-                    id="endDate"
+                    value={this.state.experience.enddate}
+                    id="enddate"
                     type="date"
                     size="sm"
                     placeholder="Current Position"
@@ -214,7 +167,7 @@ class Edit extends React.Component {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          {this.edit() && (
+          {Object.keys(this.props.exp).length > 0 && (
             <Button
               className="rounded-pill py-1 mr-auto"
               variant="danger"
@@ -248,9 +201,9 @@ class Edit extends React.Component {
           <Button
             className="rounded-pill py-1"
             variant="primary"
-            onClick={() => this.actionBtn(this.edit() ? "PUT" : "POST")}
+            onClick={() => this.fileUploadHandler()}
           >
-            {this.edit() ? "Save Changes" : "Submit"}
+            {Object.keys(this.props.exp).length > 0 ? "Save Changes" : "Add"}
           </Button>
         </Modal.Footer>
       </Modal>

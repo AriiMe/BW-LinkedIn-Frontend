@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import Edit from "./EditExp";
 import { Button, Card, Col, Row } from "react-bootstrap";
@@ -13,7 +15,7 @@ import "../styles/Experience.css";
 class Experience extends React.Component {
   state = {
     showModal: false,
-    experience: [],
+    experiences: [],
     selectedId: null,
     // method: null,
     exp: {},
@@ -63,40 +65,36 @@ class Experience extends React.Component {
   };
   searchExp = async () => {
     await fetch(
-      `https://linkedin-bw-clone.herokuapp.com/api/profile/${this.props.profile._id}/exp`,
+      `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.profile.id}/exp`,
       {
         method: "GET",
-        headers: new Headers({
-          ContentType: "application/json",
-        }),
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+        },
       }
     )
       .then((response) => response.json())
       .then((experience) => {
-        this.setState({ experience: experience });
+        this.setState({ experiences: experience });
       });
   };
   componentDidMount = () => {
     this.searchExp();
   };
   componentDidUpdate = (prevProps) => {
-    if (prevProps.profile._id !== this.props.profile._id) {
+    if (prevProps.profile.id !== this.props.profile.id) {
       this.searchExp();
     }
   };
-  toggleModal = (job) => {
-    job !== undefined
-      ? this.setState({
-          selectedId: job._id,
-          showModal: !this.state.showModal,
-        })
-      : this.setState({
-          selectedId: null,
-          showModal: !this.state.showModal,
-        });
+  toggleModal = (experience, show) => {
+    this.setState({
+      showModal: show,
+      exp: experience,
+    });
   };
 
   render() {
+    console.log("in experience", this.state);
     return (
       <>
         <Card className="bio cardProf">
@@ -107,7 +105,10 @@ class Experience extends React.Component {
               </div>
 
               <Route path="/profile/me">
-                <Button variant="white" onClick={() => this.toggleModal()}>
+                <Button
+                  variant="white"
+                  onClick={() => this.toggleModal({}, true)}
+                >
                   <IconContext.Provider
                     value={{
                       size: "24px",
@@ -125,10 +126,10 @@ class Experience extends React.Component {
               <Droppable droppableId="droppable">
                 {(provided, snapshot) => (
                   <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {this.state.experience.map((experience, index) => (
+                    {this.state.experiences.map((experience, index) => (
                       <Draggable
-                        key={experience._id}
-                        draggableId={experience._id}
+                        key={experience.id}
+                        draggableId={experience.id}
                         index={index}
                       >
                         {(provided, snapshot) => (
@@ -141,7 +142,7 @@ class Experience extends React.Component {
                               <div style={{ width: "48px" }}>
                                 <img
                                   src={
-                                    experience.image ? experience.image : Job
+                                    experience.imgurl ? experience.imgurl : Job
                                   }
                                   style={{ width: "48px" }}
                                   alt="expimg"
@@ -149,7 +150,7 @@ class Experience extends React.Component {
                               </div>
                               <Col>
                                 <ul
-                                  id={experience._id}
+                                  id={experience.id}
                                   key={`exp${index}`}
                                   className="exp"
                                 >
@@ -158,7 +159,7 @@ class Experience extends React.Component {
                                       variant="white"
                                       className="editBtnExp"
                                       onClick={() =>
-                                        this.toggleModal(experience)
+                                        this.toggleModal(experience, true)
                                       }
                                     >
                                       <IconContext.Provider
@@ -218,18 +219,15 @@ class Experience extends React.Component {
               </Droppable>
             </DragDropContext>
           </Card.Body>
-        </Card>
-        <Route path="/profile/me">
-          {" "}
-          <Edit
-            show={this.state.showModal}
-            profileId={this.props.profile._id}
-            expId={this.state.selectedId}
-            toggle={() => this.toggleModal()}
-            refetch={() => this.searchExp()}
-            color="#0A66CE"
-          />
-        </Route>
+        </Card>{" "}
+        <Edit
+          exp={this.state.exp}
+          show={this.state.showModal}
+          profileId={this.props.profile.id}
+          toggle={this.toggleModal}
+          refetch={() => this.searchExp()}
+          color="#0A66CE"
+        />
       </>
     );
   }

@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import {
   Col,
@@ -27,9 +29,9 @@ class Body extends React.Component {
   searchProfile = (id) => {
     fetch("https://linkedin-bw-clone.herokuapp.com/api/profile/" + id, {
       method: "GET",
-      headers: new Headers({
-        ContentType: "application/json",
-      }),
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
     })
       .then((response) => {
         if (response.ok) {
@@ -195,11 +197,12 @@ class Body extends React.Component {
               </Col>
             </Row>
           ) : (
-            this.setState({
-              err: true,
-              errType: "warning",
-              errMsg: "We have encounter a problem, the profile is empty",
-            })
+            <div></div>
+            // this.setState({
+            //   err: true,
+            //   errType: "warning",
+            //   errMsg: "We have encounter a problem, the profile is empty",
+            // })
           )}
         </div>
       </div>

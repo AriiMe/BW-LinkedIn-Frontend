@@ -1,3 +1,5 @@
+/** @format */
+
 import React, { Component } from "react";
 import { Row, Col, Form, Button, Container, Badge } from "react-bootstrap";
 import { Link, withRouter } from "react-router-dom";
@@ -22,7 +24,7 @@ class Login extends Component {
       if (response.ok) {
         const access_token = await response.json();
         console.log(access_token);
-        localStorage.setItem("token", access_token);
+        localStorage.setItem("token", access_token.accessToken);
         this.props.history.push("/home");
       }
     } catch (error) {

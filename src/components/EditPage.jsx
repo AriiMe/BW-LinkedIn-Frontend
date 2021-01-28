@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Row, Col, Form, Button, Modal } from "react-bootstrap";
 import { BiPencil } from "react-icons/bi";
@@ -7,31 +9,14 @@ import "../styles/EditPage.css";
 
 class EditPage extends React.Component {
   state = {
-    profile: {},
+    profile: this.props.profile,
     showModal: false,
     confirmDialog: false,
     selectedFile: null,
     imgSubmitStatus: "secondary",
   };
-  fetchMe = async () => {
-    try {
-      const pFetch = await fetch(
-        "https://linkedin-bw-clone.herokuapp.com/api/profile",
-        {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("token"),
-          },
-        }
-      );
-      const pResponse = await pFetch.json();
-      this.setState({ profile: pResponse });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  componentDidMount() {
-    this.fetchMe();
-  }
+
+  componentDidMount() {}
   onChangeHandler = (e) => {
     this.setState({
       profile: {
@@ -41,28 +26,30 @@ class EditPage extends React.Component {
     });
   };
 
-  editPage = async () => {
-    const url = "https://linkedin-bw-clone.herokuapp.com/api/profile";
-    try {
-      const response = await fetch(url, {
-        method: "PUT",
-        body: JSON.stringify(this.state.profile),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorage.getItem("token"),
-        },
-      });
-      if (response.ok) {
-        this.state.selectedFile !== null
-          ? this.fileUploadHandler()
-          : this.setState({ showModal: false }, () => this.props.refetch());
-      } else {
-        this.setState({ showModal: false });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // fileUploadHandler = async () => {
+  //   const url =
+  //     "https://linkedin-bw-clone.herokuapp.com/api/profile/" +
+  //     this.props.profile.id;
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "PUT",
+  //       body: JSON.stringify(this.state.profile),
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: "Bearer " + localStorage.getItem("token"),
+  //       },
+  //     });
+  //     if (response.ok) {
+  //       this.state.selectedFile !== null
+  //         ? this.fileUploadHandler()
+  //         : this.setState({ showModal: false }, () => this.props.refetch());
+  //     } else {
+  //       this.setState({ showModal: false });
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
   handleCloseModal = async () => {
     (await JSON.stringify(this.props.profile)) !==
     JSON.stringify(this.state.profile)
@@ -78,12 +65,15 @@ class EditPage extends React.Component {
 
   fileUploadHandler = async () => {
     const fd = new FormData();
-    fd.append("profile", this.state.selectedFile);
+    for (let key in this.state.profile) {
+      fd.append(`${key}`, this.state.profile[key]);
+    }
+    fd.append("ProfileImage", this.state.selectedFile);
     try {
       const response = await fetch(
-        `https://linkedin-bw-clone.herokuapp.com/api/profile${this.state.profile._id}/imgurl`,
+        `https://linkedin-bw-clone.herokuapp.com/api/profile/${this.state.profile.id}/upload`,
         {
-          method: "POST",
+          method: "PUT",
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
           body: fd,
         }
@@ -98,6 +88,7 @@ class EditPage extends React.Component {
     }
   };
   render() {
+    console.log(this.state);
     return (
       <>
         <div
@@ -159,7 +150,7 @@ class EditPage extends React.Component {
                     <Form.Control
                       type="text"
                       value={this.state.profile.surename}
-                      id="surname"
+                      id="surename"
                       size="sm"
                       onChange={(e) => this.onChangeHandler(e)}
                     />
@@ -219,7 +210,7 @@ class EditPage extends React.Component {
               <Button
                 className="rounded-pill py-1"
                 variant="primary"
-                onClick={() => this.editPage()}
+                onClick={() => this.fileUploadHandler()}
               >
                 {this.state.imgSubmitStatus === "secondary"
                   ? "Save"

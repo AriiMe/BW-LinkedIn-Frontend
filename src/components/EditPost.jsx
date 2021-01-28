@@ -1,3 +1,5 @@
+/** @format */
+
 import React from "react";
 import { Button, Col, Row, Modal, Form } from "react-bootstrap";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
@@ -42,6 +44,7 @@ class EditPost extends React.Component {
       } else {
         this.setState({ showModal: false });
       }
+      this.props.refetch();
     } catch (e) {
       console.log(e);
     }
@@ -167,9 +170,11 @@ class EditPost extends React.Component {
                 ? "Choose an image"
                 : "Ready to Upload"}
             </Button>
-            <Button variant="danger" onClick={() => this.Delete()}>
-              Delete
-            </Button>
+            {this.props.post.profileId === this.props.me.id && (
+              <Button variant="danger" onClick={() => this.Delete()}>
+                Delete
+              </Button>
+            )}
             <Button variant="primary" onClick={() => this.Edit()}>
               Save Changes
             </Button>
