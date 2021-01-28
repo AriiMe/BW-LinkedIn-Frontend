@@ -19,6 +19,7 @@ class Experience extends React.Component {
     selectedId: null,
     // method: null,
     exp: {},
+    profile: {},
   };
   // re-order
   grid = 8;
@@ -63,6 +64,23 @@ class Experience extends React.Component {
     result.splice(endIndex, 0, removed);
     return result;
   };
+
+  getCSV = async () => {
+    await fetch(
+      `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.profile.id}/${this.state.exp.id}/downloadcsv`,
+      {
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      }
+    )
+      .then((response) => response.json())
+
+      .then((exp) => {
+        this.setState({ exps: exp });
+      });
+  };
   searchExp = async () => {
     await fetch(
       `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.profile.id}/exp`,
@@ -78,8 +96,10 @@ class Experience extends React.Component {
         this.setState({ experiences: experience });
       });
   };
+
   componentDidMount = () => {
     this.searchExp();
+    this.getCSV();
   };
   componentDidUpdate = (prevProps) => {
     if (prevProps.profile.id !== this.props.profile.id) {
@@ -228,6 +248,7 @@ class Experience extends React.Component {
           refetch={() => this.searchExp()}
           color="#0A66CE"
         />
+        <Button onClick={() => this.getCSV()}>download csv</Button>
       </>
     );
   }

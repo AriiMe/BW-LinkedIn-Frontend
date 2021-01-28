@@ -8,6 +8,7 @@ import {
   Card,
   Dropdown,
   DropdownButton,
+  Button,
 } from "react-bootstrap";
 import Bio from "./BioCard";
 import Experience from "./Experience";
@@ -20,12 +21,32 @@ import { Route } from "react-router-dom";
 class Body extends React.Component {
   state = {
     profile: {},
+    experiences: [],
     showAlert: null,
     err: false,
     errType: null,
     errMsg: "",
     loading: true,
+    exp: {},
   };
+
+  // getCSV = async () => {
+  //   await fetch(
+  //     `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.state.profile.id}/${this.state.exp.id}/downloadcsv`,
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         authorization: "Bearer " + localStorage.getItem("token"),
+  //       },
+  //     }
+  //   )
+  //     .then((response) => response.json())
+
+  //     .then((exp) => {
+  //       this.setState({ exps: exp });
+  //     });
+  // };
+
   searchProfile = (id) => {
     fetch("https://linkedin-bw-clone.herokuapp.com/api/profile/" + id, {
       method: "GET",
@@ -56,6 +77,7 @@ class Body extends React.Component {
   componentDidMount = async () => {
     this.props.match.params.id &&
       this.searchProfile(this.props.match.params.id);
+    
   };
   componentDidUpdate = (prevProps) => {
     if (prevProps.match.params.id !== this.props.match.params.id) {
@@ -63,6 +85,7 @@ class Body extends React.Component {
     }
   };
   render() {
+    console.log("expcsv", this.state);
     return (
       <div className="bgBody">
         <div className="mainBody">
@@ -187,6 +210,7 @@ class Body extends React.Component {
                   <Feature />{" "}
                 </Route>
                 <Experience profile={this.state.profile} />
+                
               </Col>
               <Col
                 md={4}
