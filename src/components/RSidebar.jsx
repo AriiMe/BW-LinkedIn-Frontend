@@ -14,6 +14,9 @@ class RSidebar extends React.Component {
     return (
       <>
         <Card
+          data-aos="fade-right"
+          mirror="true"
+          once="false"
           style={{ borderTopRightRadius: "8px", borderTopLeftRadius: "8px" }}
         >
           <Card.Img
@@ -99,6 +102,16 @@ class RSidebar extends React.Component {
             </ListGroupItem>
           </ListGroup>
         </Card>
+        <div
+          data-aos="fade-right"
+          mirror="true"
+          once="false"
+          style={{ marginTop: "10px", borderRadius: "20px" }}
+        >
+          <ListGroup>
+            <ListGroupItem>Premium Career Group</ListGroupItem>
+          </ListGroup>
+        </div>
       </>
     );
   }

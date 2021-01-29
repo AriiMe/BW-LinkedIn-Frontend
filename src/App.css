@@ -5,7 +5,9 @@
 /* body {
   background-color: #f3f2ef;
 } */
-
+* {
+  margin: 0;
+}
 .HomeModal {
   display: flex;
   justify-content: left;
