@@ -67,7 +67,7 @@ class Experience extends React.Component {
 
   getCSV = async () => {
     await fetch(
-      `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.profile.id}/${this.state.exp.id}/downloadcsv`,
+      `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.profile.id}/downloadcsv`,
       {
         method: "GET",
         headers: {
@@ -77,9 +77,8 @@ class Experience extends React.Component {
     )
       .then((response) => response.json())
 
-      .then((exp) => {
-        this.setState({ exps: exp });
-      });
+      .then((exp) => {})
+      .catch((e) => console.log(e));
   };
   searchExp = async () => {
     await fetch(
