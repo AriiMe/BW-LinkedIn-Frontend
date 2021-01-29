@@ -66,7 +66,7 @@ class Experience extends React.Component {
   };
 
   getCSV = async () => {
-    await fetch(
+    const response = await fetch(
       `https://linkedin-bw-clone.herokuapp.com/api/exp/${this.props.profile.id}/downloadcsv`,
       {
         method: "GET",
@@ -74,11 +74,17 @@ class Experience extends React.Component {
           authorization: "Bearer " + localStorage.getItem("token"),
         },
       }
-    )
-      .then((response) => response.json())
-
-      .then((exp) => {})
-      .catch((e) => console.log(e));
+    );
+    let blob = await response.blob();
+    let url = window.URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.href = url;
+    a.setAttribute(
+      "download",
+      `${this.props.profile.username}=experiences_csv.csv`
+    );
+    document.body.appendChild(a);
+    a.click();
   };
   searchExp = async () => {
     await fetch(
@@ -98,7 +104,6 @@ class Experience extends React.Component {
 
   componentDidMount = () => {
     this.searchExp();
-    this.getCSV();
   };
   componentDidUpdate = (prevProps) => {
     if (prevProps.profile.id !== this.props.profile.id) {

@@ -47,6 +47,28 @@ class Body extends React.Component {
   //     });
   // };
 
+  getPDF = async () => {
+    const response = await fetch(
+      `https://linkedin-bw-clone.herokuapp.com/api/profile/${this.state.profile.id}/profilePDF`,
+      {
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      }
+    );
+    let blob = await response.blob();
+    let url = window.URL.createObjectURL(blob);
+    let a = document.createElement("a");
+    a.href = url;
+    a.setAttribute(
+      "download",
+      `${this.state.profile.username}=experiences_csv.pdf`
+    );
+    document.body.appendChild(a);
+    a.click();
+  };
+
   searchProfile = (id) => {
     fetch("https://linkedin-bw-clone.herokuapp.com/api/profile/" + id, {
       method: "GET",
@@ -77,7 +99,6 @@ class Body extends React.Component {
   componentDidMount = async () => {
     this.props.match.params.id &&
       this.searchProfile(this.props.match.params.id);
-    
   };
   componentDidUpdate = (prevProps) => {
     if (prevProps.match.params.id !== this.props.match.params.id) {
@@ -198,6 +219,7 @@ class Body extends React.Component {
                         </Col>
                       </Row>
                     </Card.Text>
+                    <Button onClick={() => this.getPDF()}>download PDF</Button>
                   </Card.Body>
                 </Card>
                 <Bio
@@ -210,7 +232,6 @@ class Body extends React.Component {
                   <Feature />{" "}
                 </Route>
                 <Experience profile={this.state.profile} />
-                
               </Col>
               <Col
                 md={4}
