@@ -12,8 +12,61 @@ export default class SinglePost extends React.Component {
   state = {
     likes: 0,
     isliked: false,
+    comments: [],
+    errorMessege: false,
   };
+  getComments = async () => {
+    try {
+      let response = await fetch(
+        "https://linkedin-bw-clone.herokuapp.com/api/comments/",
+        {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      console.log(response);
+      if (response.ok) {
+        let comments = await response.json();
 
+        this.setState({ comments });
+      } else {
+        this.setState({ errorMessage: true });
+      }
+    } catch (e) {
+      this.setState({ errorMessage: true });
+    }
+  };
+  handleDelete = async (e) => {
+    let id = e.currentTarget.id;
+    try {
+      let response = await fetch(
+        `https://linkedin-bw-clone.herokuapp.com/api/comments/${id}`,
+        {
+          method: "DELETE",
+          headers: new Headers({
+            Authorization: `Bearer ${process.env.REACT_APP_ACCESS_TOKEN}`,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        let filteredComments = this.state.comments.filter(
+          (comment) => comment.id !== id
+        );
+        this.setState({
+          comments: filteredComments,
+
+          deletedSize: this.state.deletedSize + 1,
+        });
+      } else {
+        alert("something went wrong :(");
+      }
+    } catch (err) {
+      console.log(err);
+      this.setState({ errorMessage: true });
+    }
+  };
   fetchLikes = async () => {
     try {
       const result = await fetch(
@@ -53,7 +106,9 @@ export default class SinglePost extends React.Component {
   componentDidMount = async () => {
     console.log(this.props.me);
     await this.fetchLikes();
+    await this.getComments();
   };
+
   render() {
     const { post, fetchPost, me } = this.props;
     console.log("me", me);

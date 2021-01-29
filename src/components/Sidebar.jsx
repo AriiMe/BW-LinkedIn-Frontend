@@ -106,7 +106,7 @@ class Sidebar extends Component {
             </div>
           </div>
         </div>
-        <div className="ad-div">
+        <div className="ad-div" style={{ position: "sticky", top: "70px" }}>
           <img
             className="ad"
             src="https://static-exp1.licdn.com/scds/common/u/images/promo/ads/li_evergreen_jobs_ad_300x250_v1.jpg"

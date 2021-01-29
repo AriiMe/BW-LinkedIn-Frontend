@@ -22,12 +22,6 @@
   transition: all 1s ease;
 }
 
-.list-group-flush > .list-group-item:last-child {
-  background-color: transparent;
-}
-.list-group-flush > .list-group-item:last-child:hover {
-  background-color: rgba(216, 9, 9, 0.164);
-}
 .crdTxtH {
   text-align: center;
   height: 100px;

@@ -97,19 +97,37 @@ class RSidebar extends React.Component {
               </svg>
               My Items
             </ListGroupItem>
-            <ListGroupItem action onClick={() => this.logout()}>
-              <button className="logoutbtn">Logout</button>
-            </ListGroupItem>
           </ListGroup>
         </Card>
         <div
           data-aos="fade-right"
           mirror="true"
           once="false"
-          style={{ marginTop: "10px", borderRadius: "20px" }}
+          style={{
+            marginTop: "10px",
+            borderRadius: "20px",
+            position: "sticky",
+            top: "70px",
+          }}
         >
           <ListGroup>
-            <ListGroupItem>Premium Career Group</ListGroupItem>
+            <ListGroupItem style={{ justifyContent: "space-between" }}>
+              Recent{" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                data-supported-dps="16x16"
+                fill="currentColor"
+                width="16"
+                height="16"
+              >
+                <path d="M1 5l7 4.61L15 5v2.39L8 12 1 7.39z"></path>
+              </svg>
+            </ListGroupItem>
+            <ListGroupItem action>Premium Career Group</ListGroupItem>
+            <ListGroupItem action onClick={() => this.logout()}>
+              <button className="logoutbtn">Logout</button>
+            </ListGroupItem>
           </ListGroup>
         </div>
       </>
