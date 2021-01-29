@@ -7,11 +7,23 @@ import Profile from "./components/ProfileBody";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Welcome from "./components/Welcome";
+import AOS from "aos";
+
 // import PostModal from "./components/PostModal";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import "aos/dist/aos.css";
+
 class App extends React.Component {
   state = { searchQuery: "" };
+  componentDidMount() {
+    AOS.init({
+      debounceDelay: 500,
+      once: false,
+      mirror: false,
+    });
+    AOS.refresh();
+  }
   searchHandler = (e) => {
     e.preventDefault();
     this.setState({ query: e.target.value });

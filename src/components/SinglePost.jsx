@@ -3,6 +3,9 @@
 import React from "react";
 import { Container, Button, Row, Col, Card, Alert } from "react-bootstrap";
 import { BiLike, BiCommentDetail, BiShare, BiSend } from "react-icons/bi";
+
+import moment from "moment";
+
 import EditPost from "./EditPost";
 
 export default class SinglePost extends React.Component {
@@ -47,18 +50,28 @@ export default class SinglePost extends React.Component {
       console.log(error);
     }
   };
-  componentDidMount = () => {
+  componentDidMount = async () => {
     console.log(this.props.me);
-    this.fetchLikes();
+    await this.fetchLikes();
   };
   render() {
     const { post, fetchPost, me } = this.props;
     console.log("me", me);
     return (
-      <Card className="w-100 my-4" key={`feed${post.id}`}>
+      <Card
+        data-aos="zoom-in-up"
+        data-aos-offset="200"
+        data-aos-duration="5000"
+        className="w-100 my-4"
+        key={`feed${post.id}`}
+      >
         <Card.Header className="d-flex justify-content-between px-3">
           <div>
-            <img src={post.profile.imgurl} className="postModalImg mr-3" />
+            <img
+              src={post.profile.imgurl}
+              className="postModalImg mr-3"
+              style={{ borderRadius: "100px" }}
+            />
             {post.profile.name + " " + post.profile.surename}
           </div>
           {me.id === post.profileId && (
@@ -68,6 +81,9 @@ export default class SinglePost extends React.Component {
         {post.imgurl && (
           <Card.Img src={post.imgurl} alt="Postimgurl" className="postimgurl" />
         )}
+        <span style={{ padding: "10px" }} className="text-muted text-right">
+          {moment(post.createdAt).fromNow()}
+        </span>
         <Card.Text className="p-3">{post.text}</Card.Text>
         <Card.Footer className="HomeModal bg-white">
           <Button

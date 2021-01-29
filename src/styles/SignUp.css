@@ -1,6 +1,3 @@
-div:not(.modal-content) {
-  transition: unset !important;
-}
 .signupDiv {
   background-color: #f3f2ef;
   width: 100vw;

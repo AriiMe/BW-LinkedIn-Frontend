@@ -7,8 +7,10 @@ import EditPost from "./EditPost";
 import PostModal from "./PostModal";
 import RSidebar from "./RSidebar";
 import Sidebar from "./Sidebar";
+import AppNavBar from "./AppNavBar";
 import "../styles/Home.css";
 import SinglePost from "./SinglePost";
+
 export default class Home extends Component {
   state = {
     posts: [],
@@ -93,6 +95,7 @@ export default class Home extends Component {
             ) : Object.keys(this.state.posts).length !== 0 ? (
               <Row>
                 <Col className="d-none d-lg-block" lg={3}>
+                  <AppNavBar me={this.state.me} />
                   <RSidebar me={this.state.me} />
                 </Col>
                 <Col lg={6} md={9}>

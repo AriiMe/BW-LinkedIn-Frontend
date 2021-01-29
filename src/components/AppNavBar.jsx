@@ -21,6 +21,29 @@ import { GiHandBag } from "react-icons/gi";
 import { RiMessage2Fill } from "react-icons/ri";
 import "../styles/AppNavBar.css";
 class AppNavBar extends React.Component {
+  state = {
+    me: {},
+  };
+  fetchMe = async () => {
+    try {
+      const meFetch = await fetch(
+        "https://linkedin-bw-clone.herokuapp.com/api/profile/me",
+        {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("token"),
+          },
+        }
+      );
+      const meResponse = await meFetch.json();
+      console.log(meResponse);
+      this.setState({ me: meResponse });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  componentDidMount() {
+    this.fetchMe();
+  }
   render() {
     return (
       <Navbar bg="white" variant="light" className="py-0 fixed-top">
@@ -99,7 +122,14 @@ class AppNavBar extends React.Component {
             </Nav.Link>
             <Nav.Link className="navLinkCol" as={Link} to="/profile/me">
               <Col className="navCol">
-                <FaUserCircle className="navIcon" />
+                <img
+                  style={{
+                    height: "25px",
+                    borderRadius: "100px",
+                  }}
+                  src={this.state.me.imgurl}
+                  className="navIcon"
+                ></img>
                 <span className="navIconText">Me</span>
               </Col>
             </Nav.Link>
@@ -107,7 +137,9 @@ class AppNavBar extends React.Component {
             <Nav.Link clas sName="navLinkCol">
               <Col className="navCol">
                 <BsGrid3X3Gap className="navIcon" />
-                <span className="navIconText">Work</span>
+                <span style={{ marginBottom: "13px" }} className="navIconText">
+                  Work
+                </span>
               </Col>
             </Nav.Link>
             <Nav.Link className="navLinkCol">
