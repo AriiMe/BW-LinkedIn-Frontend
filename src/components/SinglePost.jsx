@@ -60,7 +60,7 @@ export default class SinglePost extends React.Component {
     return (
       <Card
         data-aos="zoom-in-up"
-        data-aos-offset="200"
+        data-aos-offset="500"
         data-aos-duration="5000"
         className="w-100 my-4"
         key={`feed${post.id}`}

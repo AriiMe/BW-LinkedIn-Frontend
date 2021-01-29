@@ -46,15 +46,17 @@ class RSidebar extends React.Component {
 
             <Card.Text className="crdTxtH">
               <p className="wlcmP">
-                Welcome
-                {" " + this.props.me.name + "!"}
+                {this.props.me.name + " " + this.props.me.surename}
               </p>
-              <Card.Link>Add sessines</Card.Link>
+              <span className="text-muted text-center">
+                {this.props.me.title}
+              </span>
             </Card.Text>
           </Card.Body>
           <ListGroup className="list-group-flush">
             <ListGroupItem action>
-              ⠀⠀⠀Connections <h6>⠀⠀⠀Grow your network</h6>
+              ⠀⠀⠀<span>Connections</span>{" "}
+              <h6 style={{ marginLeft: "30px" }}>Grow your network</h6>
             </ListGroupItem>
             <ListGroupItem action>
               <svg
