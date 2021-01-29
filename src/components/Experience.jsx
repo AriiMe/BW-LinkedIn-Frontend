@@ -8,7 +8,7 @@ import { BiPencil } from "react-icons/bi";
 import { BsPlus } from "react-icons/bs";
 import Job from "../assets/job.png";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Route, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 import moment from "moment";
 // import "../styles/Profile.css";
 import "../styles/Experience.css";
@@ -78,7 +78,7 @@ class Experience extends React.Component {
       .then((response) => response.json())
 
       .then((exp) => {
-        this.setState({ exp: exp });
+        this.setState({ exps: exp });
       });
   };
   searchExp = async () => {
@@ -93,7 +93,7 @@ class Experience extends React.Component {
     )
       .then((response) => response.json())
       .then((experience) => {
-        this.setState({ exp: experience });
+        this.setState({ experiences: experience });
       });
   };
 
@@ -248,11 +248,7 @@ class Experience extends React.Component {
           refetch={() => this.searchExp()}
           color="#0A66CE"
         />
-        <Link
-          to={`exp/${this.props.profile.id}/${this.state.exp.id}/downloadcsv`}
-        >
-          <Button onClick={() => this.getCSV()}>download csv</Button>
-        </Link>
+        <Button onClick={() => this.getCSV()}>download csv</Button>
       </>
     );
   }
